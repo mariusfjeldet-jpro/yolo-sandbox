@@ -5,13 +5,10 @@ services:
       dockerfile: Dockerfile
     env_file: .env
     volumes:
-      # Keep the projects folder as a bind mount so you can code in Windows
-      # We will handle this folder creation in a script below
+      # 1. Persist the entire home directory (catches all hidden auth files, bash history, etc.)
+      - home_data:/home/pwuser
+      # 2. Overlay your local code folder inside the persistent home directory
       - ${PROJECTS_PATH}:/home/pwuser/sandbox:Z
-      # Use Named Volumes for configs - Podman creates these automatically
-      - claude_data:/home/pwuser/.claude
-      - config_data:/home/pwuser/.config
-      - gh_data:/home/pwuser/.config/gh
     ports:
       - "18888:18888"
     stdin_open: true
@@ -23,6 +20,5 @@ services:
           cpus: ${MAX_CPUS}
 
 volumes:
-  claude_data:
-  config_data:
-  gh_data:
+  # Replace the piecemeal volumes with one master volume for the user
+  home_data:
