@@ -1,8 +1,7 @@
-# 1. Ensure the projects directory exists (the only one Podman can't auto-create)
-if (!(Test-Path ./ai-sandbox)) { New-Item -ItemType Directory -Path ./ai-sandbox }
-
-# 2. Run the build and start
+# 1. Run the build and start the container in detached mode
+Write-Host "Building and starting Podman Compose..." -ForegroundColor Green
 podman compose up -d --build
 
-# 3. Drop you straight into the container
-podman exec -it yolo-sandbox-yolo-sandbox-1 bash
+# 2. Drop you straight into the bash shell of the container
+Write-Host "Attaching to container..." -ForegroundColor Cyan
+podman compose exec yolo-sandbox bash
